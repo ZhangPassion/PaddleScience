@@ -87,10 +87,10 @@ def create_optimizer(model, optimizer_name, lr, train_cfg, data_size):
         epochs=train_cfg.epochs,
         iters_per_epoch=data_size // train_cfg.batch_size,
         learning_rate=lr,
-        gamma=0.95,
-        decay_steps=5,
-        warmup_epoch=2,
-        warmup_start_lr=1.0e-6,
+        gamma=train_cfg.lr_scheduler.gamma,
+        decay_steps=train_cfg.lr_scheduler.decay_steps,
+        warmup_epoch=train_cfg.lr_scheduler.warmup_epoch,
+        warmup_start_lr=train_cfg.lr_scheduler.warmup_start_lr,
     )()
 
     if optimizer_name == "Adam":
@@ -309,7 +309,7 @@ def evaluate(cfg: DictConfig):
     r2 = r2_score(y_val.values, predictions)
     mape = mean_absolute_percentage_error(y_val.values, predictions)
 
-    print(f"Evaluation metrics:")
+    print("Evaluation metrics:")
     print(f"RMSE: {rmse:.5f}")
     print(f"R2 Score: {r2:.5f}")
     print(f"MAPE: {mape:.5f}")
